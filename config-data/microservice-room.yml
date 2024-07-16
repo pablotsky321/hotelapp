@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/hoteldb
+    username: root
+    password: root
+
+server:
+  port: 8091
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    fetch-registry: true
