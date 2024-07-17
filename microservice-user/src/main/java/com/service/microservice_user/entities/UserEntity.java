@@ -15,11 +15,14 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String numDoc;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_doc")
+    private TypeDocEntity typeDoc;
     private String email;
     private String firstName;
     private String lastName;
+
 
     public UserEntity(String email, String firstName, String lastName) {
         this.email = email;

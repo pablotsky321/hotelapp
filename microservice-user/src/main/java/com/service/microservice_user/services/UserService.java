@@ -8,10 +8,10 @@ import java.util.List;
 public interface UserService {
 
     List<UserEntity> getAllUsers();
-    UserDTO getUserById(int id);
+    UserDTO getUserById(long id);
     UserDTO getUserByEmail(String email);
     int createUser(UserDTO user);
     int updateUser(UserDTO user);
-    int deleteUser(int id);
+    int deleteUser(long id);
 
 }

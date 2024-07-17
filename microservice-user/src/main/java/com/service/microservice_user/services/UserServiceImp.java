@@ -3,6 +3,7 @@ package com.service.microservice_user.services;
 import com.service.microservice_user.DTOs.UserDTO;
 import com.service.microservice_user.entities.UserEntity;
 import com.service.microservice_user.repositories.UserRepository;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.NotSupportedException;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService{
@@ -24,9 +26,8 @@ public class UserServiceImp implements UserService{
     public List<UserEntity> getAllUsers() {
         if(userRepository.findAll().isEmpty()){
             return new ArrayList<UserEntity>();
-        }else{
-            return userRepository.findAll();
         }
+            return userRepository.findAll();
     }
 
     /**
@@ -34,8 +35,19 @@ public class UserServiceImp implements UserService{
      * @return
      */
     @Override
-    public UserDTO getUserById(int id) {
-        throw new NotImplementedException("method is not implemented yet");
+    public UserDTO getUserById(long id) {
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new NotFoundException("User not found");
+        }
+        return UserDTO
+                .builder()
+                .numDoc(user.get().getNumDoc())
+                .email(user.get().getEmail())
+                .firstName(user.get().getFirstName())
+                .lastName(user.get().getLastName())
+                .build();
+
     }
 
     /**
@@ -44,7 +56,17 @@ public class UserServiceImp implements UserService{
      */
     @Override
     public UserDTO getUserByEmail(String email) {
-        return null;
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        if(user.isEmpty()){
+            throw new NotFoundException("User not found");
+        }
+        return UserDTO
+                .builder()
+                .numDoc(user.get().getNumDoc())
+                .email(user.get().getEmail())
+                .firstName(user.get().getFirstName())
+                .lastName(user.get().getLastName())
+                .build();
     }
 
     /**
@@ -58,7 +80,7 @@ public class UserServiceImp implements UserService{
 
     /**
      * @param user
-     * @return
+     * @return int
      */
     @Override
     public int updateUser(UserDTO user) {
@@ -70,7 +92,7 @@ public class UserServiceImp implements UserService{
      * @return
      */
     @Override
-    public int deleteUser(int id) {
+    public int deleteUser(long id) {
         return 0;
     }
 }
