@@ -1,5 +1,6 @@
 package com.service.microservice_user.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class TypeDocEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String type_doc;
+    private String typeDoc;
     private String description;
     @OneToMany(mappedBy = "typeDoc")
     private Set<UserEntity> users;

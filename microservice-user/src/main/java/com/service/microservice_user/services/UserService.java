@@ -1,17 +1,19 @@
 package com.service.microservice_user.services;
 
 import com.service.microservice_user.DTOs.UserDTO;
+import com.service.microservice_user.entities.TypeDocEntity;
 import com.service.microservice_user.entities.UserEntity;
+import com.service.microservice_user.requests.RegisterRequest;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<UserEntity> getAllUsers();
-    UserDTO getUserById(long id);
-    UserDTO getUserByEmail(String email);
-    int createUser(UserDTO user);
+    List<UserDTO> getAllUsers();
+    UserDTO getUserByEmail(String email) throws ClassNotFoundException;
+    UserDTO getUserByNumDoc(String numDoc) throws ClassNotFoundException;
+    int createUser(RegisterRequest user, long typeDocId) throws Exception;
     int updateUser(UserDTO user);
-    int deleteUser(long id);
+    int deleteUser(String numDoc) throws ClassNotFoundException;
 
 }

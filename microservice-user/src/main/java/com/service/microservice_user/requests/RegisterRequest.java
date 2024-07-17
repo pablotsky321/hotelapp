@@ -1,4 +1,4 @@
-package com.service.microservice_user.DTOs;
+package com.service.microservice_user.requests;
 
 import lombok.*;
 
@@ -7,12 +7,12 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class UserDTO {
+public class RegisterRequest {
 
     private String numDoc;
     private String email;
     private String firstName;
     private String lastName;
-    private String typeDoc;
+    private long typeDoc;
 
 }

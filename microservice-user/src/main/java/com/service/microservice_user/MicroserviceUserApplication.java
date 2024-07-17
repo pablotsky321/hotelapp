@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
+@EnableDiscoveryClient
 @SpringBootApplication
 public class MicroserviceUserApplication {
 
@@ -22,7 +24,7 @@ public class MicroserviceUserApplication {
 	CommandLineRunner start(){
 		return args -> {
 			TypeDocEntity typeDocEntity = new TypeDocEntity();
-			typeDocEntity.setType_doc("CC");
+			typeDocEntity.setTypeDoc("CC");
 			typeDocEntity.setDescription("Cedula de ciudadania");
 			typeDocRepository.save(typeDocEntity);
 		};

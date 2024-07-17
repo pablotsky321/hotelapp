@@ -23,11 +23,4 @@ public class UserEntity {
     private String firstName;
     private String lastName;
 
-
-    public UserEntity(String email, String firstName, String lastName) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
 }
