@@ -11,5 +11,3 @@ eureka:
     fetch-registry: false
     healthcheck:
       enabled: true
-  server:
-    enable-self-preservation: false
