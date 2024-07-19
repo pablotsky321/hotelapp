@@ -185,6 +185,16 @@ public class RoomServiceImp implements RoomService{
     }
 
     /**
+     * @param roomNumber
+     * @param idState
+     * @return
+     */
+    @Override
+    public int changeState(int roomNumber, long idState) {
+        return 0;
+    }
+
+    /**
      * @param id long
      * @return int
      * @throws ClassNotFoundException if room not found
