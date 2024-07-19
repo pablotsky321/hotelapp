@@ -21,10 +21,10 @@ public class RoomEntity {
     private int floor;
     @Column(nullable = false,length = 50)
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_roomType")
     private TypeRoomEntity roomType;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_state")
     private StateEntity state;
 

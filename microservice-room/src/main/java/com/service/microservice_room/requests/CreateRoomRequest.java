@@ -11,7 +11,6 @@ public class CreateRoomRequest {
 
     private short capacity;
     private int roomNumber;
-    private int floor;
     private String description;
     private long roomType;
     private long state;

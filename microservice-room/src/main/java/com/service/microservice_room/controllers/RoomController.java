@@ -39,6 +39,15 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/roomsByTypeAndState")
+    public ResponseEntity<?> getRoomsByTypeAndState(@RequestParam(value = "roomTypeId") long roomTypeId,@RequestParam(value = "idState") long idState){
+        try {
+            return new ResponseEntity<>(roomService.getRoomsByTypeAndState(roomTypeId,idState),HttpStatus.ACCEPTED);
+        }catch(ClassNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/roomById/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable(value = "id") long id){
         try {
@@ -58,10 +67,10 @@ public class RoomController {
     }
 
     @PostMapping("/addRoom")
-    public ResponseEntity<?> createRoom(CreateRoomRequest request){
+    public ResponseEntity<?> createRoom(@RequestBody CreateRoomRequest request){
         try {
             return new ResponseEntity<>(roomService.createRoom(request),HttpStatus.CREATED);
-        }catch(DataAlreadyExistException | ClassNotFoundException | FieldEmptyException e){
+        }catch(DataAlreadyExistException | ClassNotFoundException | FieldEmptyException | NullPointerException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }

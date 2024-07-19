@@ -43,14 +43,7 @@ public class RoomServiceImp implements RoomService{
     private List<RoomDTO> buildList(List<RoomEntity> roomEntities){
         List<RoomDTO> roomDTOS = new ArrayList<RoomDTO>();
         for(RoomEntity room : roomEntities){
-            RoomDTO roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setRoomNumber(room.getRoomNumber());
-            roomDTO.setFloor(room.getFloor());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setRoomType(room.getRoomType().getRoomType());
-            roomDTO.setState(room.getState().getState());
-            roomDTOS.add(roomDTO);
+            roomDTOS.add(buildRoomDTO(room));
         }
         return roomDTOS;
     }
@@ -63,6 +56,7 @@ public class RoomServiceImp implements RoomService{
         roomReturn.setCapacity(room.getCapacity());
         roomReturn.setRoomType(room.getRoomType().getRoomType());
         roomReturn.setState(room.getState().getState());
+        roomReturn.setDescription(room.getDescription());
         return roomReturn;
     }
 
@@ -101,8 +95,25 @@ public class RoomServiceImp implements RoomService{
     }
 
     /**
-     * @param id
-     * @return
+     * @param roomTypeId long
+     * @param idState long
+     * @return List : RoomDTO
+     * @throws ClassNotFoundException if state or room type not found
+     */
+    @Override
+    public List<RoomDTO> getRoomsByTypeAndState(long roomTypeId, long idState) throws ClassNotFoundException {
+        Optional<StateEntity> state = stateRepository.findById(idState);
+        Optional<TypeRoomEntity> typeRoom = typeRoomRepository.findById(roomTypeId);
+        if(state.isEmpty() || typeRoom.isEmpty()){
+           throw new ClassNotFoundException("state or room type not found");
+        }
+        return buildList(roomRepository.findByStateAndRoomType(state.get(),typeRoom.get()));
+    }
+
+    /**
+     * @param id long
+     * @return RoomDTO
+     * @throws ClassNotFoundException if room not found
      */
     @Override
     public RoomDTO getRoomById(long id) throws ClassNotFoundException {
@@ -115,6 +126,7 @@ public class RoomServiceImp implements RoomService{
     /**
      * @param number long
      * @return RoomDTO
+     * @throws ClassNotFoundException if room not found
      */
     @Override
     public RoomDTO getRoomByRoomNumber(int number) throws ClassNotFoundException {
@@ -132,23 +144,23 @@ public class RoomServiceImp implements RoomService{
      */
     @Override
     public int createRoom(CreateRoomRequest room) throws FieldEmptyException, ClassNotFoundException, DataAlreadyExistException {
-        if((Integer)room.getRoomNumber() == null || (Integer)room.getFloor() == null || (Short)room.getCapacity() == null || room.getDescription() == null ){
-            throw new FieldEmptyException("All fields must be filled");
+        if(room.getRoomNumber() <= 0 || room.getCapacity() <= 0 || room.getDescription() == null ){
+            throw new FieldEmptyException("all fields must be filled");
         }
         if(room.getDescription().isEmpty()){
-            throw new FieldEmptyException("All fields must be filled");
+            throw new FieldEmptyException("all fields must be filled");
         }
         Optional<TypeRoomEntity> typeRoomFind = typeRoomRepository.findById(room.getRoomType());
         Optional<StateEntity> stateFind = stateRepository.findById(room.getState());
         if(typeRoomFind.isEmpty() || stateFind.isEmpty()){
-            throw new ClassNotFoundException("State or room type not found");
+            throw new ClassNotFoundException("state or room type not found");
         }
         if(roomRepository.findByRoomNumber(room.getRoomNumber()).isPresent()){
             throw new DataAlreadyExistException("room already exists");
         }
 
         int floor;
-        String subFloor = String.valueOf(String.valueOf(room.getFloor()).charAt(0));
+        String subFloor = String.valueOf(String.valueOf(room.getRoomNumber()).charAt(0));
         floor = Integer.parseInt(subFloor);
 
         RoomEntity roomEntity = new RoomEntity();
@@ -173,8 +185,9 @@ public class RoomServiceImp implements RoomService{
     }
 
     /**
-     * @param id
-     * @return
+     * @param id long
+     * @return int
+     * @throws ClassNotFoundException if room not found
      */
     @Override
     public int deleteRoom(long id) throws ClassNotFoundException {

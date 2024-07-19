@@ -12,6 +12,7 @@ public interface RoomService {
     List<RoomDTO> getAllRooms();
     List<RoomDTO> getRoomsByState(long idState) throws ClassNotFoundException;
     List<RoomDTO> getRoomsByRoomType(long roomTypeId) throws ClassNotFoundException;
+    List<RoomDTO> getRoomsByTypeAndState(long roomTypeId,long idState) throws ClassNotFoundException;
     RoomDTO getRoomById(long id) throws ClassNotFoundException;
     RoomDTO getRoomByRoomNumber(int number) throws ClassNotFoundException;
     int createRoom(CreateRoomRequest room) throws FieldEmptyException, ClassNotFoundException, DataAlreadyExistException;
