@@ -19,3 +19,7 @@ eureka:
     register-with-eureka: true
     healthcheck:
       enabled: true
+
+microservices:
+  user-uri: http://localhost:8090
+  room-uri: http://localhost:8091
