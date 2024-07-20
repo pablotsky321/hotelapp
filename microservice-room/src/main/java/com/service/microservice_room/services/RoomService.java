@@ -17,7 +17,7 @@ public interface RoomService {
     RoomDTO getRoomByRoomNumber(int number) throws ClassNotFoundException;
     int createRoom(CreateRoomRequest room) throws FieldEmptyException, ClassNotFoundException, DataAlreadyExistException;
     int updateRoom(RoomDTO room);
-    int changeState(int roomNumber,long idState);
+    int changeState(int roomNumber,long idState) throws ClassNotFoundException;
     int deleteRoom(long id) throws ClassNotFoundException;
 
 

@@ -185,13 +185,24 @@ public class RoomServiceImp implements RoomService{
     }
 
     /**
-     * @param roomNumber
-     * @param idState
-     * @return
+     * @param roomNumber int
+     * @param idState long
+     * @return int
      */
     @Override
-    public int changeState(int roomNumber, long idState) {
-        return 0;
+    public int changeState(int roomNumber, long idState) throws ClassNotFoundException {
+        Optional<StateEntity> stateFind = stateRepository.findById(idState);
+        if(stateFind.isEmpty()){
+            throw new ClassNotFoundException("state not found");
+        }
+        Optional<RoomEntity> roomFind = roomRepository.findByRoomNumber(roomNumber);
+        if(roomFind.isEmpty()){
+            throw new ClassNotFoundException("room not found");
+        }
+        RoomEntity room = roomFind.get();
+        room.setState(stateFind.get());
+        roomRepository.save(room);
+        return 1;
     }
 
     /**

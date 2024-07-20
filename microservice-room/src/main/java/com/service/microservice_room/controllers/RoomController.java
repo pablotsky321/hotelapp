@@ -75,6 +75,15 @@ public class RoomController {
         }
     }
 
+    @PutMapping("/changeState")
+    public ResponseEntity<?> changeState(@RequestParam(value = "roomNumber") int roomNumber,@RequestParam(value = "idState") long idState){
+        try {
+            return new ResponseEntity<>(roomService.changeState(roomNumber,idState),HttpStatus.ACCEPTED);
+        }catch(ClassNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/deleteRoom")
     public ResponseEntity<?> deleteRoom(@RequestParam(value = "id") long id){
         try {
