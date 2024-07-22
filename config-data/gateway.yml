@@ -16,7 +16,7 @@ spring:
         - id: booking
           uri: http://localhost:8092
           predicates:
-            - Path=/api/v1/booking
+            - Path=/api/v1/booking/**
 
 server:
   port: 8080
