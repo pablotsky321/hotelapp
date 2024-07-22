@@ -15,11 +15,10 @@ import java.time.LocalDate;
 @Setter
 public class CreateBookingRequest {
 
-    private LocalDate bookingDate;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private int nights;
     private int roomNumber;
-    private String userEmail;
+    private String userNumDoc;
 
 }
