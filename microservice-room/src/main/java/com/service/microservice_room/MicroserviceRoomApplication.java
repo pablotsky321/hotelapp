@@ -55,7 +55,7 @@ public class MicroserviceRoomApplication {
 			type5.setRoomType("Matrimonial");
 			type5.setDescription("room with a double bed");
 
-			typeRoomRepository.saveAll(List.of(type1,type2,type3));
+			typeRoomRepository.saveAll(List.of(type1,type2,type3,type4,type5));
 
 		};
 	}
