@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/hoteldb
-    username: root
-    password: root
+    url: ${DB_URI:jdbc:mariadb://localhost:3307/hoteldb}
+    username: ${MARIADB_ROOT_USER:root}
+    password: ${MARIADB_ROOT_PASSWORD:root}
   jpa:
     hibernate:
       ddl-auto: create
@@ -15,7 +15,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA-SERVER:http://localhost:8761/eureka}
     healthcheck:
       enabled: true
     register-with-eureka: true

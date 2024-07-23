@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  gateway:
+    container_name: api-gateway-container
+    image: api-gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    environment:
+      CONFIG-SERVER: http://config-server:8888
+      EUREKA-SERVER: http://eureka-server:8761/eureka
+      MICROSERVICE-USER: http://microservice-user:8090
+      MICROSERVICE-ROOM: http://microservice-room:8091
+      MICROSERVICE-BOOKING: http://microservice-booking:8092
+    ports:
+      - "8080:8080"
+    networks:
+      - hotel-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+
+  microservice-booking:
+    container_name: microservice-booking-container
+    image: microservice-booking
+    build:
+      context: ./microservice-booking
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      DB_URI: jdbc:mysql://mysql-db:3306/hoteldb
+      CONFIG-SERVER: http://config-server:8888
+      EUREKA-SERVER: http://eureka-server:8761/eureka
+      MICROSERVICE-USER: http://microservice-user:8090
+      MICROSERVICE-ROOM: http://microservice-room:8091
+    ports:
+      - "8092:8092"
+    networks:
+      - hotel-network
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql-db:
+        condition: service_started
+
+
+  microservice-room:
+    container_name: microservice-room-container
+    image: microservice-room
+    build:
+      context: ./microservice-room
+      dockerfile: Dockerfile
+    environment:
+      MARIADB_ROOT_USER: root
+      MARIADB_ROOT_PASSWORD: root
+      DB_URI: jdbc:mariadb://maria-db:3306/hoteldb
+      CONFIG-SERVER: http://config-server:8888
+      EUREKA-SERVER: http://eureka-server:8761/eureka
+    ports:
+      - "8091:8091"
+    networks:
+      - hotel-network
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      maria-db:
+        condition: service_started
+
+
+  microservice-user:
+    container_name: microservice-user-container
+    image: microservice-user
+    build:
+      context: ./microservice-user
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      DB_URI: jdbc:postgresql://posgres-db:5432/hoteldb
+      CONFIG-SERVER: http://config-server:8888
+      EUREKA-SERVER: http://eureka-server:8761/eureka
+    ports:
+      - "8090:8090"
+    networks:
+      - hotel-network
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      posgres-db:
+        condition: service_started
+
+  eureka-server:
+    container_name: eureka-server-container
+    image: eureka-server
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    environment:
+      CONFIG-SERVER: http://config-server:8888
+    ports:
+      - "8761:8761"
+    networks:
+      - hotel-network
+    depends_on:
+       config-server:
+         condition: service_healthy
+    healthcheck:
+      test: ["CMD","curl","http://localhost:8761/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 1
+
+  config-server:
+    container_name: config-server-container
+    image: config-server
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - hotel-network
+    healthcheck:
+      test: ["CMD","curl","http://localhost:8888/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 1
+
+  posgres-db:
+    container_name: postgres-container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: hoteldb
+    ports:
+      - 5437:5432
+    networks:
+      - hotel-network
+    volumes:
+      - postgres-volume:/var/lib/postgresql
+
+  maria-db:
+    container_name: maria-container
+    image: mariadb
+    environment:
+      MARIADB_ROOT_USER: root
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: hoteldb
+    ports:
+      - "3309:3306"
+    networks:
+      - hotel-network
+    volumes:
+      - mariadb-volume:/var/lib/mariadb
+
+  mysql-db:
+    container_name: mysql-container
+    image: mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hoteldb
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+
+networks:
+  hotel-network:
+    driver: bridge
+
+volumes:
+  postgres-volume:
+  mariadb-volume:
+  mysql-volume:

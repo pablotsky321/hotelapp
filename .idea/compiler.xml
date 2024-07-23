@@ -21,6 +21,7 @@
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="hotelapp" options="" />
       <module name="microservice-booking" options="-parameters" />
       <module name="microservice-room" options="-parameters" />
       <module name="microservice-user" options="-parameters" />

@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hoteldb
-    username: root
-    password: root
+    url: ${DB_URI:jdbc:mysql://localhost:3306/hoteldb}
+    username: ${MYSQL_ROOT_USER:root}
+    password: ${MYSQL_ROOT_PASSWORD:root}
   jpa:
     hibernate:
       ddl-auto: create
@@ -14,12 +14,12 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA-SERVER:http://localhost:8761/eureka}
     fetch-registry: true
     register-with-eureka: true
     healthcheck:
       enabled: true
 
 microservices:
-  user-uri: http://localhost:8090
-  room-uri: http://localhost:8091
+  user-uri: ${MICROSERVICE-USER:http://localhost:8090}
+  room-uri: ${MICROSERVICE-ROOM:http://localhost:8091}

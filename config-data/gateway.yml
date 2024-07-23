@@ -6,15 +6,15 @@ spring:
           enabled: true
       routes:
         - id: user
-          uri: http://localhost:8090
+          uri: ${MICROSERVICE-USER:http://localhost:8090}
           predicates:
             - Path=/api/v1/user/**
         - id: room
-          uri: http://localhost:8091
+          uri: ${MICROSERVICE-ROOM:http://localhost:8091}
           predicates:
             - Path=/api/v1/room/**
         - id: booking
-          uri: http://localhost:8092
+          uri: ${MICROSERVICE-BOOKING:http://localhost:8092}
           predicates:
             - Path=/api/v1/booking/**
 
@@ -24,7 +24,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA-SERVER:http://localhost:8761/eureka}
     register-with-eureka: false
     healthcheck:
       enabled: true
