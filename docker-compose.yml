@@ -33,7 +33,7 @@ services:
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
-      DB_URI: jdbc:mysql://mysql-db:3307/hoteldb
+      DB_URI: jdbc:mysql://mysql-db:3306/hoteldb
       CONFIG-SERVER: http://config-server:8888
       EUREKA-SERVER: http://eureka-server:8761/eureka
       MICROSERVICE-USER: http://microservice-user:8090
